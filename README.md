@@ -55,7 +55,7 @@ Create a **.env** file and add below environment variables:
         STRIPE_API_KEY=
 
 
-###Start the development server:`
+###Start the development server:
 
 `npm run dev`
 
