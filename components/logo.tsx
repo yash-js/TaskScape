@@ -16,7 +16,7 @@ function Logo() {
                     height={30}
                     width={30}
                 />
-                <p className={cn("text-lg pb-1", headingFont.className)}>TaskScape</p>
+                <p className={cn("text-lg", headingFont.className)} style={{'marginTop':'4px'}}>TaskScape</p>
             </div></Link>
     );
 }
