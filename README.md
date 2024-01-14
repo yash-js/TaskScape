@@ -1,7 +1,7 @@
 
 # TaskScape ️
 
-Effortlessly organize your tasks and projects with this Trello-inspired task management tool built on Next.js and powered by Prisma, Clerk, MySQL, Tailwind CSS, Shadown UI, and Stripe.
+Effortlessly organize your tasks and projects with this Trello-inspired task management tool built on Next.js and powered by Prisma, Clerk, MySQL, Tailwind CSS, Shadcn UI, and Stripe.
 
 ## Features ✨
 
