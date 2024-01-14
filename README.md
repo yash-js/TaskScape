@@ -22,6 +22,7 @@ Effortlessly organize your tasks and projects with this Trello-inspired task man
 -  Payments: Stripe
 -  Imagery: Unsplash API
 
+
 ## Getting Started 
 
 Clone the repository:
