@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# TaskScape ️
 
-First, run the development server:
+Effortlessly organize your tasks and projects with this Trello-inspired task management tool built on Next.js and powered by Prisma, Clerk, MySQL, Tailwind CSS, Shadown UI, and Stripe.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features ✨
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Visual task boards: Create boards, lists, and cards to visualize your workflows and streamline collaboration.
+- Drag-and-drop functionality: Easily move cards between lists to prioritize tasks and track progress.
+- Card details and comments: Add descriptions, comments, due dates, attachments, and checklists to tasks for clarity and organization.
+- User management: Invite team members, assign tasks, and manage permissions to control access and collaboration.
+- Authentication and authorization: Secure your workspace with Clerk for seamless user registration, login, and role-based access control.
+- Payment integration: Seamlessly accept payments with Stripe for premium features or subscriptions (optional).
+- Responsive design: Adapts seamlessly to different screen sizes for optimal viewing on any device.
+- Unsplash API integration: Enhance your boards with stunning background images.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack ️
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+:tw-1f449: Frontend: Next.js, Tailwind CSS, Shadown UI
+:tw-1f449: Backend:  Prisma, MySQL
+:tw-1f449: Authentication: Clerk
+:tw-1f449: Payments: Stripe
+:tw-1f449: Imagery: Unsplash API
 
-## Learn More
+## Getting Started 
 
-To learn more about Next.js, take a look at the following resources:
+Clone the repository:
+`git clone https://github.com/your-username/taskscape.git`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install dependencies:
+`cd taskscape`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+`npm install`
 
-## Deploy on Vercel
+Create a **.env** file and add below environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- #### Clerk
+    	NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR_KEY
+    	CLERK_SECRET_KEY=YOUR_KEY
+    	NEXT_PUBLIC_CLERK_SIGN_IN_URL=/SIGN-IN
+    	NEXT_PUBLIC_CLERK_SIGN_UP_URL=/SIGN-UP
+    	NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+    	NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- #### Prisma
+        DATABASE_URL=mysql://...
+
+- #### Stripe 
+    	STRIPE_API_KEY=...
+    	STRIPE_WEBHOOK_SECRET=...
+
+- #### Unsplash 
+        NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=
+        NEXT_PUBLIC_UNSPLASH_SECRET_KEY=
+        STRIPE_API_KEY=
+
+
+###Start the development server:`
+
+`npm run dev`
+
+Open http://localhost:3000 in your browser.
+
+
+## License 
+
+This project is licensed under the MIT License.
+
+## Acknowledgements 
+
+1. Trello for inspiring this project
+2. Next.js for providing a powerful framework
+3. Prisma for simplifying database interactions
+4. Clerk for effortless authentication
+5. Stripe for payment processing (optional)
+6. Tailwind CSS for utility-first styling
+7. Shadown UI for accessible and beautiful components
+8. Heartfelt Special Thanks to [Antonio Erdeljac](https://www.codewithantonio.com/projects/trello-clone "Trello Clone By Antonio Erdeljac")
