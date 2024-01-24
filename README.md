@@ -16,7 +16,7 @@ Effortlessly organize your tasks and projects with this Trello-inspired task man
 
 ## Tech Stack ️
 
--  Frontend: Next.js, Tailwind CSS, Shadown UI
+-  Frontend: Next.js, Tailwind CSS, Shadcn UI
 -  Backend:  Prisma, MySQL
 -  Authentication: Clerk
 -  Payments: Stripe
