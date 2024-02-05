@@ -26,10 +26,10 @@ Effortlessly organize your tasks and projects with this Trello-inspired task man
 ## Getting Started 
 
 Clone the repository:
-`git clone https://github.com/your-username/taskscape.git`
+`git clone https://github.com/yash-js/TaskScape.git`
 
 Install dependencies:
-`cd taskscape`
+`cd TaskScape`
 
 `npm install`
 
