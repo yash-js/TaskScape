@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { notFound, redirect } from "next/navigation";
 import BoardNavbar from "./_components/board-navbar";
 
+import Progress from "@/components/progress-bar";
 
 export async function generateMetadata({ params }: {
     params: { boardId: string }
@@ -39,19 +40,22 @@ async function BoardIdLayout({ children, params }: { children: React.ReactNode, 
         return notFound()
     }
     return (
-        <div
-            className="relative h-full bg-no-repeat bg-cover bg-center"
-            style={{
-                backgroundImage: `url(${board.imageFullUrl})`
-            }}>
-            <BoardNavbar board={board} />
+        <>
+            <Progress />
             <div
-                className="absolute inset-0 bg-black/10"
-            />
-            <main className="pt-28 relative h-full">
-                {children}
-            </main>
-        </div>
+                className="relative h-full bg-no-repeat bg-cover bg-center"
+                style={{
+                    backgroundImage: `url(${board.imageFullUrl})`
+                }}>
+                <BoardNavbar board={board} />
+                <div
+                    className="absolute inset-0 bg-black/10"
+                />
+                <main className="pt-28 relative h-full">
+                    {children}
+                </main>
+            </div>
+        </>
     );
 }
 
