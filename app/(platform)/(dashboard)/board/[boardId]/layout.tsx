@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { notFound, redirect } from "next/navigation";
 import BoardNavbar from "./_components/board-navbar";
 
@@ -8,7 +8,7 @@ import Progress from "@/components/progress-bar";
 export async function generateMetadata({ params }: {
     params: { boardId: string }
 }) {
-    const { orgId } = auth()
+    const { orgId } = await auth()
     if (!orgId) {
         return {
             title: "Board"
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: {
 }
 
 async function BoardIdLayout({ children, params }: { children: React.ReactNode, params: { boardId: string } }) {
-    const { orgId } = auth()
+    const { orgId } = await auth()
 
     if (!orgId) return redirect('/select-org')
     const board = await db.board.findUnique({

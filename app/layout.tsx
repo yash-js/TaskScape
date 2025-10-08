@@ -4,6 +4,9 @@ import './globals.css'
 import { siteConfig } from '@/config/site'
 import Progress from "@/components/progress-bar";
 import { SocketProvider } from "@/components/providers/socket-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from 'sonner'
+import { NavigationLoading } from "@/components/navigation-loading";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,13 +30,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <SocketProvider>
-          <Progress />
-          {children}
-        </SocketProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <SocketProvider>
+            <Progress />
+            <Toaster position="top-center" />
+            <NavigationLoading />
+            {children}
+          </SocketProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

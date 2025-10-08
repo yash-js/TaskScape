@@ -1,5 +1,5 @@
 import { boardService } from '@/lib/db-service'
-import { auth } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
 import { NextPage } from 'next'
 import { redirect } from 'next/navigation'
 import ListContainer from './_components/list-container'
@@ -16,7 +16,7 @@ interface Props {
 const BoardIdPage: NextPage<Props> = async ({ params }) => {
   const {
     orgId
-  } = auth()
+  } = await auth()
 
   if (!orgId) return redirect('/select-org')
 

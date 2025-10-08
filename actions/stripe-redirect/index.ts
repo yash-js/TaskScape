@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { ReturnType } from "./types";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
@@ -10,7 +10,7 @@ import { absoluteUrl } from "@/lib/utils";
 import { stripe } from "@/lib/stripe";
 
 const handler = async (): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const { userId, orgId } = await auth();
   const user = await currentUser();
   if (!userId || !user || !orgId) {
     return {

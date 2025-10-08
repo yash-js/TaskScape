@@ -1,28 +1,54 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
-export default authMiddleware({
-  publicRoutes: ["/",'/api/webhook'],
-  afterAuth(auth, req) {
-    if (auth.userId && auth.isPublicRoute) {
-      let path = "/select-org";
-      if (auth.orgId) {
-        path = `/organization/${auth.orgId}`;
-      }
-      const orgSelection = new URL(path, req.url);
-      return NextResponse.redirect(orgSelection);
+// Define which routes are public
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/webhook(.*)",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  const { userId, orgId } = await auth();
+  const { pathname } = req.nextUrl;
+  
+  // Skip redirects for static files and API routes
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+  
+  // If user is authenticated and on a public route, redirect to dashboard
+  if (userId && isPublicRoute(req)) {
+    // Don't redirect if already on sign-in/sign-up pages
+    if (pathname === '/sign-in' || pathname === '/sign-up') {
+      return NextResponse.next();
     }
-    if (!auth?.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
+    
+    let path = "/select-org";
+    if (orgId) {
+      path = `/organization/${orgId}`;
     }
-    if (auth?.userId && !auth.orgId && req.nextUrl.pathname !== "/select-org") {
-      const orgSelection = new URL("/select-org", req.url);
-      return NextResponse.redirect(orgSelection);
+    const orgSelection = new URL(path, req.url);
+    return NextResponse.redirect(orgSelection);
+  }
+  
+  // If user is not authenticated and trying to access protected route
+  if (!userId && !isPublicRoute(req)) {
+    // Don't redirect if already on sign-in page
+    if (pathname === '/sign-in') {
+      return NextResponse.next();
     }
-  },
+    return NextResponse.redirect(new URL('/sign-in', req.url));
+  }
+  
+  // If user is authenticated but no org and not on select-org page
+  if (userId && !orgId && pathname !== "/select-org") {
+    const orgSelection = new URL("/select-org", req.url);
+    return NextResponse.redirect(orgSelection);
+  }
+  
+  return NextResponse.next();
 });
 
 export const config = {
