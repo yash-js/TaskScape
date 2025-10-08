@@ -15,7 +15,9 @@ interface ListContainerProps {
 function reorder<T>(list: T[], startIndex: number, endIndex: number) {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+    if (removed) {
+        result.splice(endIndex, 0, removed);
+    }
 
     return result;
 };
@@ -112,11 +114,13 @@ function ListContainer({ data, boardId }: ListContainerProps) {
             else {
                 // Remove card from source
                 const [movedCard] = sourceList.cards.splice(source.index, 1)
-                // Assign the new list id to moved card
-                movedCard.listId = destination.droppableId
+                if (movedCard) {
+                    // Assign the new list id to moved card
+                    movedCard.listId = destination.droppableId
 
-                // Add Card to Destination List
-                destList.cards.splice(destination.index, 0, movedCard)
+                    // Add Card to Destination List
+                    destList.cards.splice(destination.index, 0, movedCard)
+                }
 
                 sourceList.cards.forEach((card, idx) => card.order = idx)
             }

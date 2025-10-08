@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/config/site'
 import Progress from "@/components/progress-bar";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,8 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Progress />
-        {children}
+        <SocketProvider>
+          <Progress />
+          {children}
+        </SocketProvider>
       </body>
     </html>
   )

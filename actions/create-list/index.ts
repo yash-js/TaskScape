@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs";
 import { InputType, ReturnType } from "./types";
-import { db } from "@/lib/db";
+import { listService } from "@/lib/db-service";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateList } from "./schema";
@@ -21,53 +21,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   const { title, boardId } = data;
   let list;
   try {
-    const board = await db.board.findUnique({
-      where: {
-        id: boardId,
-        orgId,
-      },
-    });
+    // Use optimized service
+    list = await listService.createList({ title, boardId, orgId });
 
-    if (!board) {
-      return {
-        error: "Board Not Found!",
-      };
-    }
-
-    const lastList = await db.list.findFirst({
-      where: {
-        boardId: boardId,
-      },
-      orderBy: {
-        order: "desc", //this reorder "order" column of db
-      },
-      select: {
-        order: true,
-      },
-    });
-
-    const newOrder = lastList ? lastList.order + 1 : 1;
-
-    list = await db.list.create({
-      data: {
-        title,
-        boardId,
-        order: newOrder,
-      },
-    });
-    await createAuditLog({
+    // Create audit log asynchronously (don't wait for it)
+    createAuditLog({
       entityId: list.id,
       entityTitle: list.title,
       entityType: ENTITY_TYPE.LIST,
       action: ACTION.CREATE,
-    });
+    }).catch(console.error); // Log error but don't fail the request
+
   } catch (error) {
+    console.error("Failed to create list:", error);
     return {
-      error: "Failed to Create!",
+      error: error instanceof Error ? error.message : "Failed to Create!",
     };
   }
 
   revalidatePath(`/board/${boardId}`);
+  
+  // Emit real-time update (this will be handled by the client)
   return {
     data: list,
   };

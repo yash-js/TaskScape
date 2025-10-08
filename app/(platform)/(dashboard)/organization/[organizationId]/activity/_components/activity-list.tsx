@@ -15,7 +15,7 @@ export async function ActivityList() {
             orgId
         },
         orderBy:{
-            createAt:'desc'
+            createdAt:'desc'
         }
     })
     return (

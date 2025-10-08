@@ -2,7 +2,6 @@ datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
-  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -21,8 +20,11 @@ model Board {
 
   lists         List[]
 
-  createAt      DateTime  @default(now())
-  udpatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([orgId])
+  @@index([createdAt])
 }
 
 
@@ -37,13 +39,14 @@ model List{
   cards       Card[]
 
   @@index([boardId])
+  @@index([boardId, order])
 
-  createAt    DateTime  @default(now())
-  udpatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   }
 
 
-  model       Card{
+model Card{
   id          String    @id @default(uuid())
   title       String
   order       Int
@@ -52,11 +55,11 @@ model List{
   listId      String
   list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
 
-
   @@index([listId])
+  @@index([listId, order])
 
-  createAt    DateTime  @default(now())
-  udpatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 enum ACTION{
@@ -82,8 +85,12 @@ model AuditLog{
   userImage   String       @db.Text
   userName    String       @db.Text
 
-  createAt    DateTime     @default(now())
-  udpatedAt   DateTime     @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([orgId])
+  @@index([entityId])
+  @@index([createdAt])
 }
 
 model OrgLimit{
@@ -91,8 +98,8 @@ model OrgLimit{
   orgId     String    @unique
   count     Int       @default(0)
 
-  createAt  DateTime  @default(now())
-  udpatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 

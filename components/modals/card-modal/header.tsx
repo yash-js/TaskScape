@@ -42,7 +42,7 @@ export const Header = ({
         const title = formData.get('title') as string
         const boardId = params?.boardId as string
 
-        if (title == data?.title) return null
+        if (title == data?.title) return
 
         execute({
             title,

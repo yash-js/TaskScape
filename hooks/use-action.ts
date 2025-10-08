@@ -27,12 +27,15 @@ export const useAction = <TInput, TOutput>(
 
   const execute = useCallback(
     async (input: TInput) => {
+      setIsLoading(true);
+      setError(undefined);
+      setFieldErrors(undefined);
+      
       try {
         const result = await action(input);
         if (!result) {
           return;
         }
-
 
         setFieldErrors(result.fieldErrors);
 
@@ -45,9 +48,13 @@ export const useAction = <TInput, TOutput>(
           setData(result?.data);
           options?.onSuccess?.(result?.data);
         }
-      }finally {
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+        setError(errorMessage);
+        options?.onError?.(errorMessage);
+      } finally {
         setIsLoading(false);
-        options.onComplete?.();
+        options?.onComplete?.();
       }
     },
     [action, options]

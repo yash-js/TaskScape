@@ -12,6 +12,15 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  swcMinify: true,
+  poweredByHeader: false,
+  compress: true,
 };
 
 module.exports = nextConfig;

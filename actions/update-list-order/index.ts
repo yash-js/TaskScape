@@ -38,9 +38,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     lists = await db.$transaction(transaction);
   } catch (error) {
+    console.error("Failed to reorder lists:", error);
     return {
       error: "Failed to reorder."
-    }
+    };
   }
 
   revalidatePath(`/board/${boardId}`);

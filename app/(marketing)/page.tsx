@@ -1,9 +1,13 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import localFont from 'next/font/local'
-import { Medal } from "lucide-react";
+import { Medal, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const headingFont = localFont({
     src: "../../public/fonts/font.woff2"
@@ -18,6 +22,14 @@ const textFont = Poppins({
 })
 
 function MarketingPage() {
+    const router = useRouter();
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    const handleGetStarted = () => {
+        setIsNavigating(true);
+        router.push('/sign-up');
+    };
+
     return (
         <div className="flex items-center justify-center flex-col">
             <div className={cn("flex items-center justify-center flex-col", headingFont.className)}>
@@ -35,9 +47,20 @@ function MarketingPage() {
             <div className={cn("text-sm md:text-xl text-neutral-400 mt-4 max-w-xs md:max-w-2xl text-center", textFont.className)}>
                 Collaborate, Manage Projects, and Reach New Productivity peaks. From high rises to home office, the way your team works in unique - accomplish it all with TaskScape.
             </div>
-            <Button className="mt-6" size={'lg'} asChild>
-                <Link href='/sign-up'>
-                    Get TaskScape For Free!</Link>
+            <Button 
+                className="mt-6" 
+                size={'lg'} 
+                onClick={handleGetStarted}
+                disabled={isNavigating}
+            >
+                {isNavigating ? (
+                    <>
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        Getting Started...
+                    </>
+                ) : (
+                    'Get TaskScape For Free!'
+                )}
             </Button>
         </div>
     );

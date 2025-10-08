@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useAction } from "@/hooks/use-action";
 import { createList } from "@/actions/create-list";
 import { toast } from "sonner";
+import { useRealtimeBoard } from "@/hooks/use-realtime-board";
 
 function ListForm() {
     const router = useRouter()
@@ -18,17 +19,27 @@ function ListForm() {
     const formRef = useRef<ElementRef<'form'>>(null)
     const inputRef = useRef<ElementRef<'input'>>(null)
     const [isEditing, setIsEditing] = useState(false)
+    
+    // Real-time updates
+    const { emitListCreated } = useRealtimeBoard({
+        boardId: params?.boardId as string,
+        showNotifications: false // We'll handle notifications manually
+    })
 
 
 
-    const { execute, fieldErrors,setFieldErrors } = useAction(createList, {
+    const { execute, fieldErrors, setFieldErrors, isLoading } = useAction(createList, {
         onSuccess: data => {
+            // Emit real-time update immediately
+            emitListCreated(data)
             toast.success(`List "${data?.title}" Created!`)
             disableEditing()
+            // Use router.refresh() for immediate UI update
             router.refresh()
         },
         onError: error => {
             toast.error(error)
+            // Keep form open on error so user can retry
         }
     })
 
@@ -36,7 +47,7 @@ function ListForm() {
         setIsEditing(true)
         setTimeout(() => {
             inputRef.current?.focus()
-        })
+        }, 100) // Slightly longer delay for better UX
     }
 
     const disableEditing = () => {
@@ -72,6 +83,7 @@ function ListForm() {
                     id='title'
                     className="text-sm px-2 py-1 h-7 font-medium border-input hover:drop-shadow-md focus:border-input transition"
                     placeholder="Enter List Title"
+                    disabled={isLoading}
                 />
                 <input
                     type="text"
@@ -80,7 +92,7 @@ function ListForm() {
                     name="boardId"
                 />
                 <div className="flex items-center gap-x-1 ">
-                    <FormSubmit>
+                    <FormSubmit loadingText="Adding List...">
                         Add List
                     </FormSubmit>
                     <Button
@@ -88,6 +100,7 @@ function ListForm() {
                         onClick={disableEditing}
                         size={'sm'}
                         variant={'ghost'}
+                        disabled={isLoading}
                     >
                         <X
                             className="h-5 w-5"

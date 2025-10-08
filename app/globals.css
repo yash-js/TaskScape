@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-loading {
+  animation: loading 1s ease-in-out infinite;
+}
+
 html,
 body,
 :root {

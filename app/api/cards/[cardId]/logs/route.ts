@@ -19,7 +19,7 @@ export async function GET(
         entityType: ENTITY_TYPE.CARD,
       },
       orderBy: {
-        createAt: "desc",
+        createdAt: "desc",
       },
       take: 3,
     });

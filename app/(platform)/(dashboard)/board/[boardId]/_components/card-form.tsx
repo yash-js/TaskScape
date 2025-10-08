@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { ElementRef, KeyboardEventHandler, forwardRef, useRef } from "react";
 import { toast } from "sonner";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
+import { useRealtimeBoard } from "@/hooks/use-realtime-board";
 
 interface CardFormProps {
     listId: string;
@@ -25,15 +26,24 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({ listId
 }, ref) => {
     const params = useParams()
     const formRef = useRef<ElementRef<'form'>>(null)
+    
+    // Real-time updates
+    const { emitCardCreated } = useRealtimeBoard({
+        boardId: params?.boardId as string,
+        showNotifications: false // We'll handle notifications manually
+    })
 
-    const { execute, fieldErrors } = useAction(createCard, {
+    const { execute, fieldErrors, isLoading } = useAction(createCard, {
         onSuccess: data => {
+            // Emit real-time update immediately
+            emitCardCreated(data)
             toast.success(`Card "${data?.title}" Created!`)
             formRef.current?.reset()
             disableEditing()
         },
         onError: error => {
             toast.error(error)
+            // Keep form open on error so user can retry
         }
     })
 
@@ -68,6 +78,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({ listId
                 ref={ref}
                 placeholder="Enter a title for this card"
                 errors={fieldErrors}
+                disabled={isLoading}
             />
             <input
                 type="text"
@@ -77,13 +88,14 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(({ listId
                 value={listId}
             />
             <div className="flex items-center gap-x-1">
-                <FormSubmit>
+                <FormSubmit loadingText="Adding Card...">
                     Add a Card
                 </FormSubmit>
                 <Button
                     onClick={disableEditing}
                     size={'sm'}
                     variant={'ghost'}
+                    disabled={isLoading}
                 >
                     <X
                         className="w-5 h-5"
